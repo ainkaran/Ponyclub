@@ -24,7 +24,7 @@ public class MainActivity extends Activity
 	public Button showPopupButton;
 	public View popupView;
 
-	public boolean popupIsVisible = false;
+	public String gameState = "start";
 
 	public int heightDisplay;
 	public int widthDisplay;
@@ -48,6 +48,13 @@ public class MainActivity extends Activity
 		showPopupButton.setOnClickListener(openPopupButtonOnClickListner);
 
 
+		setGameLoop();
+
+
+	}
+
+	public void setGameLoop(){
+
 	}
 
 
@@ -56,8 +63,11 @@ public class MainActivity extends Activity
 		public void onClick(View v)
 		{
 			Log.i(TAG, "button clicked");
-			if (!popupIsVisible)
+			Log.i(TAG, gameState);
+			switch(gameState)
 			{
+				case "start":
+					Log.i(TAG, "case: start");
 
 				layoutInflater = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
 				popupView = layoutInflater.inflate(R.layout.m_popup_window, null);
@@ -69,13 +79,20 @@ public class MainActivity extends Activity
 
 
 				//popupview implementation
-				mPopUpWindow.showAtLocation(mainLayout, Gravity.CENTER, 50, 50);
+				mPopUpWindow.showAtLocation(mainLayout, Gravity.START, 0, 0);
 				mPopUpWindow.update(50, 50, 512, 512);
-				popupIsVisible = true;
+				gameState = "head visible";
 
-			} else {
+					break;
+
+				case "head visible":
+					Log.i(TAG, "case: head visible");
 				mPopUpWindow.dismiss();
-				popupIsVisible = false;
+					gameState = "start";
+				break;
+
+				default:
+					break;
 			}
 		}
 	};
@@ -84,8 +101,14 @@ public class MainActivity extends Activity
 	{
 		public void onClick(View v)
 		{
-			mPopUpWindow.dismiss();
-			popupIsVisible = false;
+			Log.i(TAG, "dismissOnClickListner");
+			switch(v.getId())
+			{
+				case R.id.mPopupWindowId:
+				mPopUpWindow.dismiss();
+					gameState = "start";
+					break;
+			}
 		}
 	};
 

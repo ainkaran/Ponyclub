@@ -7,9 +7,9 @@
     >
 
     <ImageView
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ponyclubicon"
+        android:layout_width="wrap_content"
+        android:src="@drawable/warning_sign_may_breath_fire"
         />
 
 </LinearLayout>
