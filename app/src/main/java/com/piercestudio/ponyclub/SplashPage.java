@@ -29,7 +29,7 @@ public class SplashPage extends Activity
 		};
 
 		Handler mHandler = new Handler();
-		mHandler.postDelayed(splash, 1000);
+		mHandler.postDelayed(splash, 500);
 
 	}
 }

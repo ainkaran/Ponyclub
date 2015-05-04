@@ -4,10 +4,13 @@
     <string name="app_name">Ponyclub</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
     <string-array name="list_of_promts">
         <item>"Where is the head?"</item>
         <item>"Where is the tail?"</item>
         <item>"Where is the kitty?"</item>
     </string-array>
+
+    <string name="title_activity_nyan_cat_sound">NyanCatSound</string>
 
 </resources>

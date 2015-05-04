@@ -2,14 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:id="@+id/mPopupWindowId"
+              android:id="@+id/hoofsPopupWindowId"
               android:background="@android:color/transparent"
     >
 
-    <ImageView
+    <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:src="@drawable/warning_sign_may_breath_fire"
+        android:background="#ffffff"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:text="These are the pony's hoofs"
         />
 
 </LinearLayout>

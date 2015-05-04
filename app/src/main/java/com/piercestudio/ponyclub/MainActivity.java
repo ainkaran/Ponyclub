@@ -18,6 +18,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import java.util.Random;
 import android.graphics.Point;
+import android.media.MediaPlayer;
 
 public class MainActivity extends Activity
 {
@@ -32,15 +33,17 @@ public class MainActivity extends Activity
 	public final Point mPoint = new Point();
 
 	public String gameState = "start";
+	public int i = 0;
+	public boolean popupIsActive = false;
 
 	public int heightDisplay;
 	public int widthDisplay;
+	public MediaPlayer player;
 
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
 
 		Display mDisplay = getWindowManager().getDefaultDisplay();
 		widthDisplay = mDisplay.getWidth();
@@ -50,71 +53,62 @@ public class MainActivity extends Activity
 
 		mainLayout = (LinearLayout) findViewById(R.id.activity_main_layout_id);
 
-
-		//showPopupButton
 		showPopupButton = (Button) findViewById(R.id.button_Bar_bottom_id);
 
-
-		setGameLoop();
-
-
+		setGameLoop(i);
 	}
 
-	public void setGameLoop(){
-		Random randomGenerator = new Random();
-		int randomInt = randomGenerator.nextInt(12);
-		switch(randomInt){
-			case 0:
-			case 1:
-			case 2:
-			case 3:
-				showPopupButton.setText("Where is the pony's head?");
-				mainLayout.setOnTouchListener(headPopupButtonOnTouchListner);
-				break;
-			case 4:
-			case 5:
-			case 6:
-				showPopupButton.setText("Where is the pony's tail?");
-				mainLayout.setOnTouchListener(tailPopupButtonOnTouchListner);
-				break;
-			case 7:
-			case 8:
-			case 9:
-				showPopupButton.setText("Where are the pony's front hoofs?");
-				mainLayout.setOnTouchListener(hoofsPopupButtonOnTouchListner);
-				break;
-			case 10:
-				showPopupButton.setText("Where is the kitty?");
-				mainLayout.setOnTouchListener(kittyPopupButtonOnTouchListner);
-				break;
-			case 11:
-				showPopupButton.setText("Where is the Nyan Cat?");
-				mainLayout.setOnTouchListener(nyanCatPopupButtonOnTouchListner);
-				break;
+	public void setGameLoop(int i){
+			switch (i)
+			{
+				case 0:
+					showPopupButton.setText("Where is the pony's head?");
+					mainLayout.setOnTouchListener(headPopupButtonOnTouchListner);
+					break;
+				case 1:
+					showPopupButton.setText("Where is the pony's tail?");
+					mainLayout.setOnTouchListener(tailPopupButtonOnTouchListner);
+					break;
+				case 2:
+					showPopupButton.setText("Where are the pony's front hoofs?");
+					mainLayout.setOnTouchListener(hoofsPopupButtonOnTouchListner);
+					break;
+				case 3:
+					showPopupButton.setText("Where is the kitty?");
+					mainLayout.setOnTouchListener(kittyPopupButtonOnTouchListner);
+					break;
+				case 4:
+					showPopupButton.setText("Where is the Nyan Cat?");
+					mainLayout.setOnTouchListener(nyanCatPopupButtonOnTouchListner);
+					break;
 
-		}
+			}
 	}
-
 
 	OnTouchListener headPopupButtonOnTouchListner = new OnTouchListener()
 	{
 			@Override
 			public boolean onTouch(View v, MotionEvent event)
 			{
-				if(event.getX()<(mPoint.x/2))
+				Log.i(TAG, "X: " + event.getX() + " Y: " + event.getY());
+				if(event.getX()<(550) && event.getY()>500 && event.getY()<770 && popupIsActive != true)
 				{
+					popupIsActive = true;
+					Log.i(TAG, "headOnClick");
 					layoutInflater = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-					popupView = layoutInflater.inflate(R.layout.m_popup_window, null);
+					popupView = layoutInflater.inflate(R.layout.head_popup_window, null);
 					mPopUpWindow = new PopupWindow(popupView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
 					mPopUpWindow.setBackgroundDrawable(new BitmapDrawable());
 					//mPopUpWindow.setOutsideTouchable(true);
 					popupView.setOnClickListener(dismissPopupButtonOnClickListner);
 
+					showPopupButton.setText("There's the pony's head!");
 
 					//popupview implementation
 					mPopUpWindow.showAtLocation(mainLayout, Gravity.START, 0, 0);
 					mPopUpWindow.update(50, 50, 512, 512);
+					i = 1;
 				}
 				return true;
 
@@ -126,20 +120,26 @@ public class MainActivity extends Activity
 		@Override
 		public boolean onTouch(View v, MotionEvent event)
 		{
-			if(event.getX()>(mPoint.x/2))
+			Log.i(TAG, "X: " + event.getX() + " Y: " + event.getY());
+			if(event.getX()>700 && event.getY()>770 & event.getY()<1400 && popupIsActive != true)
 			{
+				Log.i(TAG, "tailOnClick");
+				popupIsActive = true;
 				layoutInflater = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-				popupView = layoutInflater.inflate(R.layout.m_popup_window, null);
+				popupView = layoutInflater.inflate(R.layout.tail_popup_window, null);
 				mPopUpWindow = new PopupWindow(popupView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
 				mPopUpWindow.setBackgroundDrawable(new BitmapDrawable());
 				//mPopUpWindow.setOutsideTouchable(true);
 				popupView.setOnClickListener(dismissPopupButtonOnClickListner);
 
+				showPopupButton.setText("There's the pony's tail!");
+
 
 				//popupview implementation
 				mPopUpWindow.showAtLocation(mainLayout, Gravity.START, 0, 0);
-				mPopUpWindow.update(50, 50, 512, 512);
+				mPopUpWindow.update(600, 500, 512, 512);
+				i = 2;
 			}
 			return true;
 
@@ -151,20 +151,26 @@ public class MainActivity extends Activity
 		@Override
 		public boolean onTouch(View v, MotionEvent event)
 		{
-			if(event.getY()<(mPoint.y/2))
+			Log.i(TAG, "X: " + event.getX() + " Y: " + event.getY());
+			if(event.getX()<550 && event.getY()>770 & event.getY()<1400 && popupIsActive != true)
 			{
+				Log.i(TAG, "hoofsOnClick");
+				popupIsActive = true;
 				layoutInflater = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-				popupView = layoutInflater.inflate(R.layout.m_popup_window, null);
+				popupView = layoutInflater.inflate(R.layout.hoofs_popup_window, null);
 				mPopUpWindow = new PopupWindow(popupView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
 				mPopUpWindow.setBackgroundDrawable(new BitmapDrawable());
 				//mPopUpWindow.setOutsideTouchable(true);
 				popupView.setOnClickListener(dismissPopupButtonOnClickListner);
 
+				showPopupButton.setText("There are the pony's hoofs!");
+
 
 				//popupview implementation
 				mPopUpWindow.showAtLocation(mainLayout, Gravity.START, 0, 0);
-				mPopUpWindow.update(50, 50, 512, 512);
+				mPopUpWindow.update(50, 450, 512, 512);
+				i = 3;
 			}
 			return true;
 
@@ -176,20 +182,27 @@ public class MainActivity extends Activity
 		@Override
 		public boolean onTouch(View v, MotionEvent event)
 		{
-			if(event.getY()<(mPoint.y/2))
+			Log.i(TAG, "X: " + event.getX() + " Y: " + event.getY());
+			if(event.getY()>500 && event.getY()<1000 && event.getX()>550 && popupIsActive != true)
 			{
+				Log.i(TAG, "kittyOnClick");
+				popupIsActive = true;
 				layoutInflater = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-				popupView = layoutInflater.inflate(R.layout.m_popup_window, null);
+				popupView = layoutInflater.inflate(R.layout.kitty_popup_window, null);
 				mPopUpWindow = new PopupWindow(popupView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
 				mPopUpWindow.setBackgroundDrawable(new BitmapDrawable());
 				//mPopUpWindow.setOutsideTouchable(true);
 				popupView.setOnClickListener(dismissPopupButtonOnClickListner);
 
+				showPopupButton.setText("There's the kitty!");
+
 
 				//popupview implementation
 				mPopUpWindow.showAtLocation(mainLayout, Gravity.START, 0, 0);
-				mPopUpWindow.update(50, 50, 512, 512);
+				mPopUpWindow.update(450, -60, 512, 512);
+				i = 4;
+
 			}
 			return true;
 
@@ -201,20 +214,31 @@ public class MainActivity extends Activity
 		@Override
 		public boolean onTouch(View v, MotionEvent event)
 		{
-			if(event.getY()<(mPoint.y/2))
+			Log.i(TAG, "X: " + event.getX() + " Y: " + event.getY());
+			if(event.getY()>1200 && event.getY()<1400 && event.getX()>800 && popupIsActive != true)
 			{
+				Log.i(TAG, "nyanCatOnClick");
+				popupIsActive = true;
 				layoutInflater = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-				popupView = layoutInflater.inflate(R.layout.m_popup_window, null);
+				popupView = layoutInflater.inflate(R.layout.nyan_cat_popup_window, null);
 				mPopUpWindow = new PopupWindow(popupView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
 				mPopUpWindow.setBackgroundDrawable(new BitmapDrawable());
 				//mPopUpWindow.setOutsideTouchable(true);
 				popupView.setOnClickListener(dismissPopupButtonOnClickListner);
 
+				showPopupButton.setText("NYAN CAAAT!");
+
 
 				//popupview implementation
-				mPopUpWindow.showAtLocation(mainLayout, Gravity.START, 0, 0);
-				mPopUpWindow.update(50, 50, 512, 512);
+				mPopUpWindow.showAtLocation(mainLayout, Gravity.CENTER, 0, 0);
+				mPopUpWindow.update(0, 0, 500, 1000);
+
+				player = MediaPlayer.create(MainActivity.this,R.raw.nyancat37seconds);
+				player.start();
+
+				i = 0;
+
 			}
 			return true;
 
@@ -226,23 +250,49 @@ public class MainActivity extends Activity
 		public void onClick(View v)
 		{
 			Log.i(TAG, "dismissOnClickListner");
-				mPopUpWindow.dismiss();
-			setGameLoop();
+
+			stopPlayer();
+
+			popupIsActive = false;
+
+			mPopUpWindow.dismiss();
+
+			setGameLoop(i);
+
 		}
 	};
+
+	public void stopPlayer(){
+		Log.i(TAG, "stopping");
+		try
+		{
+			if (player.isPlaying())
+			{
+				Log.i(TAG, "stopped");
+				player.stop();
+			}
+		} catch (Exception e) {
+		}
+	}
 
 	@Override
 	protected void onPause()
 	{
 		super.onPause();
-		mPopUpWindow.dismiss();
+		if(mPopUpWindow != null)
+		{
+			mPopUpWindow.dismiss();
+		}
 	}
 
 	@Override
 	protected void onDestroy()
 	{
 		super.onDestroy();
-		mPopUpWindow.dismiss();
+		if(mPopUpWindow != null)
+		{
+			mPopUpWindow.dismiss();
+		}
 	}
 
 	@Override
